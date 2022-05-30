@@ -1,13 +1,49 @@
-<script setup lang="ts">
-import { ref } from 'vue'
+<script  lang="ts">
+import { ref, defineComponent, PropType, onMounted } from 'vue'
 
-defineProps<{ msg: string }>()
+interface User {
+  msg: string
+  abc: number
+}
 
-const count = ref(0)
+export default defineComponent({
+  name: 'HelloWorld',
+  props: {
+    msg: {
+      type: String,
+      required: true
+    },
+    abc: {
+      type: Number,
+      required: true
+    },
+    Obj: {
+      type: Object as PropType<User>,
+    }
+  },
+  setup(props) {
+    const msg = ref(props.msg)
+    console.log(msg.value);
+    const Font = ref<{ msg: String, abc: Number } | null>(null)
+    Font.value = {
+      msg: "vue3",
+      abc: 123
+    }
+    const title = ref<HTMLHeadElement | null>(null)
+    onMounted(() => {
+      console.log(title.value);
+    })
+    // 方法
+    const say = () => {
+      console.log("say");
+    }
+    return { title }
+  }
+})
 </script>
 
 <template>
-  <h1>{{ msg }}</h1>
+  <h1 ref="title">{{ msg }}</h1>
 
   <p>
     Recommended IDE setup:
@@ -18,19 +54,7 @@ const count = ref(0)
 
   <p>See <code>README.md</code> for more information.</p>
 
-  <p>
-    <a href="https://vitejs.dev/guide/features.html" target="_blank">
-      Vite Docs
-    </a>
-    |
-    <a href="https://v3.vuejs.org/" target="_blank">Vue 3 Docs</a>
-  </p>
 
-  <button type="button" @click="count++">count is: {{ count }}</button>
-  <p>
-    Edit
-    <code>components/HelloWorld.vue</code> to test hot module replacement.
-  </p>
 </template>
 
 <style scoped>
